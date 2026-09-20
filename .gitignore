@@ -3,3 +3,4 @@ build/
 *.out
 a.out
 demos/kth_Largest
+build/*.san

@@ -118,3 +118,46 @@ void poly_print(const Polynomial *p, FILE *fp)
     if (!printed)
         fprintf(fp, "0");
 }
+
+/* 习题 3.8：多项式的幂。用二进制幂：p^n 只需要 O(log n) 次多项式乘法，
+ * 每次乘法 O(deg^2)，故总代价 O(deg^2 · log n)。
+ * （朴素做法要 n-1 次乘法，即 O(deg^2 · n)。） */
+Polynomial *poly_one(void)
+{
+    double c = 1.0;
+    return poly_create(&c, 0);
+}
+
+Polynomial *poly_pow(const Polynomial *p, int n)
+{
+    if (p == NULL || n < 0)
+        return NULL;
+
+    Polynomial *result = poly_one();
+    if (result == NULL)
+        return NULL;
+
+    Polynomial *base = poly_create(p->coeff, p->degree);
+    if (base == NULL) {
+        poly_dispose(result);
+        return NULL;
+    }
+
+    while (n > 0) {
+        if (n & 1) {
+            Polynomial *t = poly_mul(result, base);
+            poly_dispose(result);
+            if (t == NULL) { poly_dispose(base); return NULL; }
+            result = t;
+        }
+        n >>= 1;
+        if (n > 0) {
+            Polynomial *t = poly_mul(base, base);
+            poly_dispose(base);
+            if (t == NULL) { poly_dispose(result); return NULL; }
+            base = t;
+        }
+    }
+    poly_dispose(base);
+    return result;
+}

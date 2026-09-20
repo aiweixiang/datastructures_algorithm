@@ -213,3 +213,23 @@ void lil_print(const ListLinked *l, FILE *fp)
     }
     fprintf(fp, ")");
 }
+
+/* 习题 3.11：递归版查找。
+ * 时间与迭代版相同（O(N)），但**栈空间 O(N)**：
+ * 递归深度等于"目标位置"或表长，而迭代版是 O(1) 空间。
+ * 这正是"能用迭代就别用递归"在这种线性结构上的典型对比。 */
+static PtrToNode lil_find_rec(PtrToNode p, element_type x)
+{
+    if (p == NULL)
+        return NULL;
+    if (p->elem == x)
+        return p;
+    return lil_find_rec(p->next, x);
+}
+
+PtrToNode lil_find_recursive(element_type x, const ListLinked *l)
+{
+    if (l == NULL)
+        return NULL;
+    return lil_find_rec(l->head->next, x);
+}

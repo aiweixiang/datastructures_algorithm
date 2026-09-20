@@ -32,7 +32,7 @@
 │   ├── fibonacci.c  kth_largest.c      Fibonacci / 选择问题
 │   ├── permutations.c  rng.c           2.7 随机置换（+ 可复现 LCG）
 │   └── ch02.h
-├── ch03_lists_stacks_queues/           第 3 章 表、栈和队列（18/26 完成）
+├── ch03_lists_stacks_queues/           第 3 章 表、栈和队列（26/26 完成）
 │   ├── ANSWERS.md                      含复杂度对照表与各题思路
 │   ├── list_array.c  list_linked.c     顺序表 / 带头结点单链表（含判环、断环）
 │   ├── list_cursor.c  list_doubly.c    游标表 / 带哨兵双链表
@@ -43,7 +43,15 @@
 │   ├── balanced_symbols.c              括号匹配
 │   ├── infix_to_postfix.c              中缀→后缀、后缀→中缀
 │   ├── postfix_eval.c                  后缀表达式求值
-│   ├── josephus.c                      Josephus（模拟 + 递推）
+│   ├── print_lots.c                    3.2  按位置列表打印链表元素
+│   ├── bignum.c                        3.9  任意精度整数（加/减/乘/比较）
+│   ├── radix_records.c                 3.13 基数排序学生记录（LSD，稳定）
+│   ├── adjacency.c                     3.14 图→邻接表（链表版 + 游标版）
+│   ├── array_dedup.c                   3.16 数组去重（保序 O(N²) / 排序 O(N log N)）
+│   ├── lazy_list.c                     3.17 懒惰删除（含摊还分析）
+│   ├── three_stacks.c                  3.23 一个数组实现三个栈
+│   ├── recursion_depth.c               3.24 斐波那契递归的时间/空间分离
+│   ├── deque.c                         3.26 双端队列（两端 O(1)）
 │   └── ch03.h
 ├── tests/                              每章一个测试 + fixtures/
 ├── demos/                              kth_Largest.c（手写原版）、selection_timing.c（1.1 计时）
@@ -64,8 +72,11 @@ make clean
 |------|--------|------|
 | `tests/test_ch01.c` | 595 | ✅ |
 | `tests/test_ch02.c` | 63965 | ✅ |
-| `tests/test_ch03.c` | 8774 | ✅ |
-| **合计** | **73334** | ✅ 全部通过 |
+| `tests/test_ch03.c` | 421092 | ✅ |
+| **合计** | **485652** | ✅ 全部通过 |
+
+另外三个测试都在 `-fsanitize=address,undefined` 下通过（无越界、无未定义行为）——
+上面这个"游标邻接表 head 初值"和"懒惰删除模型数组越界"两个 bug 就是靠它抓出来的。
 
 `make demos && ./build/selection_timing` 会打印 1.1 要的运行时间表（本机实测）：
 
@@ -83,8 +94,8 @@ make clean
 |----|------|------|
 | 1 | 引论（1.1 ~ 1.10） | ✅ 完成（4 个代码模块 + 6 题的证明/推导） |
 | 2 | 算法分析（2.1 ~ 2.25） | ✅ 完成（12 个代码模块 + 10 题的书面推导） |
-| 3 | 表、栈和队列（3.1 ~ 3.26） | 🟡 18/26；待补 3.2、3.8、3.9、3.11(递归)、3.13、3.14、3.16、3.17、3.23、3.24、3.26 |
-| 4 | 树（4.1 ~ 4.46） | ⏳ 下一轮 |
+| 3 | 表、栈和队列（3.1 ~ 3.26） | ✅ 完成（26/26：21 个代码模块 + 复杂度分析题） |
+| 4 | 树（4.1 ~ 4.46） | ⏳ 下一轮（BST/AVL/伸展树/B 树/证明题 46 项） |
 | 5 | 散列 | ⏳ |
 | 6 | 优先队列（堆） | ⏳ |
 | 7 | 排序 | ⏳ |
@@ -103,3 +114,4 @@ make clean
 - **习题编号以主题为准**：不同版本编号会整体移位（例如「带 FindMin 的栈」在英文 2e 是 3.25、
   在你的版本是 3.22），映射见 `NUMBERING.md`。
 - 随机性测试使用自带的**确定性 LCG**，失败可精确复现；关键算法另与独立暴力参考实现对拍。
+- 内存安全用 `-fsanitize=address,undefined` 复核：`build/test_ch0*.san`（见本文"编译与测试"）。

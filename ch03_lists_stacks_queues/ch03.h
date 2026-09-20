@@ -213,4 +213,125 @@ void        poly_print(const Polynomial *p, FILE *fp);
 int sorted_intersect(const int a[], int na, const int b[], int nb, int out[]);
 int sorted_union(const int a[], int na, const int b[], int nb, int out[]);
 
+/* ================= 3.2 PrintLots ================= */
+/* 按 P 中给出的位置（**1 起始**）打印 L 中的元素；越界位置跳过并计入 *skipped。
+ * simple 版对每个位置各走一遍链表 O(|P|·|L|)；linear 版要求 P 升序，O(|L|+|P|)。 */
+int print_lots_simple(const ListLinked *l, const int positions[], int npos,
+                      FILE *fp, int *skipped);
+int print_lots_linear(const ListLinked *l, const int positions[], int npos,
+                      FILE *fp, int *skipped);
+
+/* ================= 3.8 多项式的幂 ================= */
+Polynomial *poly_one(void);
+Polynomial *poly_pow(const Polynomial *p, int n);   /* 二进制幂，O(deg^2 · log n) */
+
+/* ================= 3.9 任意精度整数 ================= */
+typedef struct BigInt BigInt;
+BigInt *big_from_str(const char *s);
+BigInt *big_from_ll(long long v);
+void    big_dispose(BigInt *b);
+char   *big_to_str(const BigInt *b);        /* 调用者 free */
+int     big_cmp(const BigInt *a, const BigInt *b);
+BigInt *big_neg(const BigInt *a);
+BigInt *big_add(const BigInt *a, const BigInt *b);
+BigInt *big_sub(const BigInt *a, const BigInt *b);
+BigInt *big_mul(const BigInt *a, const BigInt *b);
+
+/* ================= 3.11 递归查找链表元素 ================= */
+PtrToNode lil_find_recursive(element_type x, const ListLinked *l);
+
+/* ================= 3.13 基数排序学生记录 ================= */
+typedef struct {
+    int  key;
+    char name[16];
+} StudentRecord;
+
+void radix_sort_records(StudentRecord a[], int n);   /* LSD，十进制，O(P·(N+10)) */
+
+/* ================= 3.14 图 → 邻接表（链表版 / 游标版） ================= */
+typedef struct AdjNode {
+    int             vertex;
+    int             weight;
+    struct AdjNode *next;
+} AdjNode;
+
+typedef struct {
+    int        n;          /* 顶点数，编号 1..n */
+    int        m;          /* 有向边条数 */
+    AdjNode  **head;       /* head[1..n] */
+} AdjGraph;
+
+AdjGraph *adj_create(int n);
+void      adj_dispose(AdjGraph *g);
+int       adj_add_edge(AdjGraph *g, int u, int v, int w, int undirected);
+AdjGraph *adj_read(FILE *fp, int n);          /* 每行 "u v [w]"，w 默认 1 */
+void      adj_print(const AdjGraph *g, FILE *fp);
+
+typedef struct {
+    int vertex;
+    int weight;
+    int next;              /* 下一条边的下标，CURSOR_NULL 表示结束 */
+} CursorAdj;
+
+typedef struct {
+    int        n;
+    int        m;
+    int        capacity;
+    CursorAdj *edges;      /* edges[1..capacity] */
+    int       *head;       /* head[1..n] */
+} CursorAdjGraph;
+
+CursorAdjGraph *cadg_create(int n, int max_edges);
+void            cadg_dispose(CursorAdjGraph *g);
+int             cadg_add_edge(CursorAdjGraph *g, int u, int v, int w, int undirected);
+CursorAdjGraph *cadg_from_adj(const AdjGraph *g);
+
+/* ================= 3.16 删除数组中的重复元素 ================= */
+int remove_duplicates_slow(int a[], int n);   /* O(N^2)，保持首次出现顺序 */
+int remove_duplicates_sort(int a[], int n);   /* O(N log N)，改变顺序 */
+
+/* ================= 3.17 懒惰删除 ================= */
+typedef struct LazyList LazyList;
+LazyList *lz_create(int cap);
+void      lz_dispose(LazyList *l);
+int       lz_compact(LazyList *l);
+int       lz_insert(element_type x, LazyList *l);
+int       lz_find(element_type x, const LazyList *l);    /* 返回槽位下标或 -1 */
+int       lz_delete(element_type x, LazyList *l);
+int       lz_live(const LazyList *l);
+int       lz_deleted(const LazyList *l);
+int       lz_slots(const LazyList *l);          /* 含已删除的槽位总数 */
+int       lz_compactions(const LazyList *l);    /* 整理次数（摊还分析用） */
+
+/* ================= 3.23 一个数组实现三个栈 ================= */
+typedef struct ThreeStacks ThreeStacks;
+ThreeStacks *ts3_create(int capacity);
+void         ts3_dispose(ThreeStacks *t);
+int          ts3_push(int which, element_type x, ThreeStacks *t);
+int          ts3_pop(int which, ThreeStacks *t, element_type *out);
+int          ts3_is_empty(int which, const ThreeStacks *t);
+int          ts3_is_full(int which, const ThreeStacks *t);
+int          ts3_size(int which, const ThreeStacks *t);
+int          ts3_capacity_share(const ThreeStacks *t, int which);
+
+/* ================= 3.24 斐波那契递归的栈空间 ================= */
+int                fib_max_depth(int n);        /* 最大栈帧数：n≥1 时为 n，n=0 时为 1 */
+unsigned long long fib_call_count(int n);       /* == 2F(n+1) - 1 */
+
+/* ================= 3.26 双端队列 ================= */
+typedef struct Deque Deque;
+Deque       *deq_create(int init_capacity);
+void         deq_dispose(Deque *d);
+void         deq_make_empty(Deque *d);
+int          deq_is_empty(const Deque *d);
+int          deq_size(const Deque *d);
+int          deq_capacity(const Deque *d);
+int          deq_push_front(element_type x, Deque *d);
+int          deq_push_back(element_type x, Deque *d);
+element_type deq_front(const Deque *d);
+element_type deq_back(const Deque *d);
+element_type deq_pop_front(Deque *d);
+element_type deq_pop_back(Deque *d);
+void         deq_print(const Deque *d, FILE *fp);
+
 #endif /* CH03_H */
