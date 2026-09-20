@@ -1,90 +1,105 @@
-# 数据结构与算法分析（C 语言描述 · Weiss 第 2 版）课后习题解答
+# 数据结构与算法分析（C 语言描述 · Weiss）课后习题解答
 
-本仓库是《Data Structures and Algorithm Analysis in C》(Second Edition, Mark Allen Weiss)
-课后习题的**个人原创解答**：能写成程序的题目全部给出可编译、可测试的 C 代码，理论题给出推导过程。
+《Data Structures and Algorithm Analysis in C》(Mark Allen Weiss) 课后习题的**原创解答**：
+能写成程序的题目全部给出可编译、可测试的 C 代码，理论题给出完整推导。
 
-> 说明：仓库内**不转载**教材原文，习题一律用「编号 + 主题」引用，解答为本仓库作者独立完成。
-> 正式的 Instructor's Solutions Manual 未被参考或复制。
+> 仓库内**不转载教材原文**，习题一律用「编号 + 主题」引用，解答为作者独立完成。
+> 官方 Instructor's Solutions Manual 未被参考或复制。习题编号映射见 `NUMBERING.md`。
 
 ## 目录结构
 
 ```
 .
+├── NUMBERING.md                        习题编号对照表（你的版本 ↔ 英文 2e）
+├── NOTES.md                            范围与版权说明
 ├── include/test_util.h                 零依赖断言测试框架
-├── NUMBERING.md                        习题编号对照表（英文 2e ↔ 你的版本）
-├── ch01_introduction/                  第 1 章 引论
-│   └── ANSWERS.md
-├── ch02_algorithm_analysis/            第 2 章 算法分析
-│   ├── ch02.h                          本章全部接口
-│   ├── ANSWERS.md                      书面题解答
-│   ├── max_subsequence_sum.c           最大子序列和的 4 种算法
-│   ├── binary_search.c                 二分查找 / lower_bound / upper_bound
-│   ├── gcd.c                           Euclid、扩展 Euclid、lcm
-│   ├── power.c                         幂运算（O(N) 与 O(log N)、模幂）
-│   ├── log2_floor.c                    ⌊log2 N⌋、⌈log2 N⌉、2 的幂判定
-│   ├── horner.c                        Horner 法则
-│   ├── fibonacci.c                     递归 / 迭代 / 记忆化 / 矩阵快速幂
-│   └── kth_largest.c                   选择问题（排序、堆、快速选择）
-├── ch03_lists_stacks_queues/           第 3 章 表、栈和队列
-│   ├── ch03.h                          本章全部接口与 ADT 定义
-│   ├── ANSWERS.md                      书面题解答 + 复杂度对照表
-│   ├── list_array.c                    顺序表
-│   ├── list_linked.c                   带头结点的单链表（含 Floyd 判环/断环）
-│   ├── list_cursor.c                   游标（数组模拟链表）实现
-│   ├── list_doubly.c                   带哨兵的双链表
-│   ├── list_ops.c                      有序表求交/求并
-│   ├── stack_array.c                   动态数组栈（倍增扩容）
-│   ├── stack_linked.c                  链式栈
-│   ├── queue_circular.c                循环数组队列（倍增扩容）
-│   ├── two_stacks.c                    一个数组实现两个栈
-│   ├── min_stack.c                     带 FindMin 的栈（Push/Pop/FindMin 均 O(1)）
+├── ch01_introduction/                  第 1 章 引论（1.1 ~ 1.10 全部完成）
+│   ├── ANSWERS.md
+│   ├── print_real.c                    1.3  只用 PrintDigit 输出实数/任意进制
+│   ├── include_expand.c                1.4  嵌套 #include 展开（含循环检测）
+│   └── word_puzzle.c                   1.2  字谜游戏（8 方向找词）
+├── ch02_algorithm_analysis/            第 2 章 算法分析（2.1 ~ 2.25 全部完成）
+│   ├── ANSWERS.md                      含 2.1~2.6、2.18、2.20~2.22、2.24 的书面推导
+│   ├── max_subsequence_sum.c           最大子序列和 4 种算法（含区间）
+│   ├── subsequence_variants.c          2.12 最小/最小正/最大乘积 + 2.25 迭代次数
+│   ├── binary_search.c                 二分查找、lower/upper bound、2.23 单比较版
+│   ├── fixed_point.c                   2.11 A[i] == i
+│   ├── primes.c                        2.13 素数判定 / 2.14 筛法
+│   ├── majority.c                      2.19 Boyer–Moore 投票
+│   ├── pow_chain.c                     2.15~2.17 快速幂乘次数、x^62 八次乘法
+│   ├── power.c  log2_floor.c           幂运算 / 对数
+│   ├── gcd.c    horner.c               欧几里得 / Horner 法则
+│   ├── fibonacci.c  kth_largest.c      Fibonacci / 选择问题
+│   ├── permutations.c  rng.c           2.7 随机置换（+ 可复现 LCG）
+│   └── ch02.h
+├── ch03_lists_stacks_queues/           第 3 章 表、栈和队列（18/26 完成）
+│   ├── ANSWERS.md                      含复杂度对照表与各题思路
+│   ├── list_array.c  list_linked.c     顺序表 / 带头结点单链表（含判环、断环）
+│   ├── list_cursor.c  list_doubly.c    游标表 / 带哨兵双链表
+│   ├── list_ops.c  polynomial.c        有序表求交并 / 多项式 ADT
+│   ├── stack_array.c  stack_linked.c   两种栈
+│   ├── queue_circular.c                循环数组队列
+│   ├── two_stacks.c  min_stack.c       一数组两栈 / 带 FindMin 的栈
 │   ├── balanced_symbols.c              括号匹配
 │   ├── infix_to_postfix.c              中缀→后缀、后缀→中缀
 │   ├── postfix_eval.c                  后缀表达式求值
-│   ├── josephus.c                      Josephus 问题（模拟 + 递推）
-│   └── polynomial.c                    多项式 ADT
-├── tests/                              每个章一个测试可执行文件
-├── demos/                              最早手写的 demo（保留原始版本）
+│   ├── josephus.c                      Josephus（模拟 + 递推）
+│   └── ch03.h
+├── tests/                              每章一个测试 + fixtures/
+├── demos/                              kth_Largest.c（手写原版）、selection_timing.c（1.1 计时）
 └── Makefile
 ```
 
 ## 编译与测试
 
 ```bash
-make test          # 编译并运行全部测试
-make demos         # 编译 demos/
+make test      # 编译并运行全部测试
+make demos     # 编译 demos/（含 1.1 的计时表）
 make clean
 ```
 
-环境：任意 C11 编译器（gcc/clang）+ make。当前测试状态：
+当前状态（`-std=c11 -Wall -Wextra`，**零警告**）：
 
 | 测试 | 断言数 | 结果 |
 |------|--------|------|
-| `tests/test_ch02.c` | 52037 | ✅ 全部通过 |
-| `tests/test_ch03.c` | 8774 | ✅ 全部通过 |
+| `tests/test_ch01.c` | 595 | ✅ |
+| `tests/test_ch02.c` | 63965 | ✅ |
+| `tests/test_ch03.c` | 8774 | ✅ |
+| **合计** | **73334** | ✅ 全部通过 |
 
-编译参数为 `-std=c11 -Wall -Wextra`，**零警告**。
+`make demos && ./build/selection_timing` 会打印 1.1 要的运行时间表（本机实测）：
+
+```
+        N     sort(ms)     heap(ms)   select(ms)
+    10000        0.646        0.227        0.047   (三法结果一致: yes)
+    40000        2.954        1.050        0.274   (三法结果一致: yes)
+   160000       13.329        5.013        1.297   (三法结果一致: yes)
+   640000       67.062       18.369        5.100   (三法结果一致: yes)
+```
 
 ## 完成进度
 
 | 章 | 主题 | 状态 |
 |----|------|------|
-| 1 | Introduction 引论 | ✅ 书面解答 |
-| 2 | Algorithm Analysis 算法分析 | ✅ 书面解答 + 8 个代码模块 + 测试 |
-| 3 | Lists, Stacks, and Queues | ✅ 书面解答 + 14 个代码模块 + 测试 |
-| 4 | Trees 树 | ⏳ 待完成 |
-| 5 | Hashing 散列 | ⏳ 待完成 |
-| 6 | Priority Queues (Heaps) 优先队列 | ⏳ 待完成 |
-| 7 | Sorting 排序 | ⏳ 待完成 |
-| 8 | The Disjoint Set ADT 不相交集 | ⏳ 待完成 |
-| 9 | Graph Algorithms 图论算法 | ⏳ 待完成 |
-| 10 | Algorithm Design Techniques 算法设计技巧 | ⏳ 待完成 |
-| 11 | Amortized Analysis 摊还分析 | ⏳ 待完成 |
-| 12 | Advanced Data Structures 高级数据结构 | ⏳ 待完成 |
+| 1 | 引论（1.1 ~ 1.10） | ✅ 完成（4 个代码模块 + 6 题的证明/推导） |
+| 2 | 算法分析（2.1 ~ 2.25） | ✅ 完成（12 个代码模块 + 10 题的书面推导） |
+| 3 | 表、栈和队列（3.1 ~ 3.26） | 🟡 18/26；待补 3.2、3.8、3.9、3.11(递归)、3.13、3.14、3.16、3.17、3.23、3.24、3.26 |
+| 4 | 树（4.1 ~ 4.46） | ⏳ 下一轮 |
+| 5 | 散列 | ⏳ |
+| 6 | 优先队列（堆） | ⏳ |
+| 7 | 排序 | ⏳ |
+| 8 | 不相交集 | ⏳ |
+| 9 | 图论算法 | ⏳ |
+| 10 | 算法设计技巧 | ⏳ |
+| 11 | 摊还分析 | ⏳ |
+| 12 | 高级数据结构 | ⏳ |
 
 ## 约定
 
-- 链表/表的下标在本仓库中统一为 **0 起始**；教材中「第 k 个」的查询保持 **1 起始**（与题目措辞一致）。
-- 查找失败统一返回 `ELEMENT_NOT_FOUND`（值为 `-1`）。
-- 每个 `.c` 文件顶部注释写明该实现对应的习题编号与复杂度。
-- **习题编号以主题为准**：不同印次/译本的编号会整体移位（例如「带 FindMin 的栈」在英文 2e 是 3.25，在你的版本是 3.22）。因此小节标题写作「主题（英文 2e 编号 X）」，代码文件名一律用主题名，映射表见 `NUMBERING.md`。
+- 链表/表的下标统一为 **0 起始**；教材中「第 k 个」的查询保持 **1 起始**（与题目措辞一致）。
+  涉及 `A[i] == i`（2.11）这类题时两种约定都实现，避免下标歧义。
+- 查找失败统一返回 `ELEMENT_NOT_FOUND`（`-1`）。
+- 每个 `.c` 文件顶部注释写明对应习题、主题与复杂度。
+- **习题编号以主题为准**：不同版本编号会整体移位（例如「带 FindMin 的栈」在英文 2e 是 3.25、
+  在你的版本是 3.22），映射见 `NUMBERING.md`。
+- 随机性测试使用自带的**确定性 LCG**，失败可精确复现；关键算法另与独立暴力参考实现对拍。
