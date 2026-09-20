@@ -6,8 +6,9 @@ LDLIBS  := -lm
 CH01_LIB := $(wildcard ch01_introduction/*.c)
 CH02_LIB := $(wildcard ch02_algorithm_analysis/*.c)
 CH03_LIB := $(wildcard ch03_lists_stacks_queues/*.c)
+CH04_LIB := $(wildcard ch04_trees/*.c)
 
-TESTS := build/test_ch01 build/test_ch02 build/test_ch03
+TESTS := build/test_ch01 build/test_ch02 build/test_ch03 build/test_ch04
 
 .PHONY: all test demos clean
 
@@ -24,6 +25,9 @@ build/test_ch02: tests/test_ch02.c $(CH02_LIB) include/test_util.h | build
 
 build/test_ch03: tests/test_ch03.c $(CH03_LIB) include/test_util.h | build
 	$(CC) $(CFLAGS) -o $@ tests/test_ch03.c $(CH03_LIB) $(LDLIBS)
+
+build/test_ch04: tests/test_ch04.c $(CH04_LIB) include/test_util.h | build
+	$(CC) $(CFLAGS) -o $@ tests/test_ch04.c $(CH04_LIB) $(LDLIBS)
 
 # 手写 demo 与计时程序（含 main，不参与测试链接）
 build/kth_largest_demo: demos/kth_Largest.c | build

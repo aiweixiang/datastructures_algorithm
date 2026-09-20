@@ -75,9 +75,41 @@
 
 ## 第 4 章（4.1 ~ 4.46）
 
-已收到你的编号列表（46 题），将按该表实现。其中：
-- 4.10 / 4.11 / 4.18 / 4.20 / 4.28 / 4.35 / 4.37 / 4.41 / 4.42 / 4.44 / 4.45 / 4.46 需要完整代码；
-- 4.1 ~ 4.9 / 4.14 / 4.15 / 4.17 / 4.22 / 4.25 / 4.26 是证明与手算题；
-- 4.12 / 4.27 需要随机实验（用本仓库可复现的 LCG）。
+实现与推导见 `ch04_trees/ANSWERS.md`，测试见 `tests/test_ch04.c`。
 
-> 若还有其他章节的编号列表，按同样方式发来即可（只需「编号 + 一句话主题」）。
+| 你的编号 | 主题 | 实现 / 状态 |
+|----------|------|-------------|
+| 4.1 ~ 4.3 | 二叉树性质、深度 | `tree_core.c`（`tree_depth`） + ANSWERS.md ✅ |
+| 4.4 ~ 4.7 | 四种遍历、遍历序列判定 | `tree_preorder/inorder/postorder/level_order` ✅ |
+| 4.8 | 表达式树（中缀↔后缀、求值） | `expr_tree_from_postfix/eval/print` ✅ |
+| 4.9 | 由两种遍历重建二叉树 | ANSWERS.md ✅ |
+| 4.10 / 4.11 | BST 的 Find / Insert / Delete | `bst.c` ✅ |
+| 4.12 | 随机 BST 高度/IPL（随机实验） | `bst_random` + 测试 ✅ |
+| 4.13 | 删除两子结点的三种做法 | `bst_delete_right_min/left_max/merge` ✅ |
+| 4.14 | 内部路径长 IPL | `bst_internal_path_length` + 公式 ✅ |
+| 4.15 | AVL 最少结点数 N(h) | `avl_min_nodes` ✅ |
+| 4.16 | 单旋 / 双旋四种形态 | `avl.c`（`rotate_*` / `rebalance`） ✅ |
+| 4.17 | 完全平衡 | `avl_is_perfect` ✅ |
+| 4.18 / 4.19 | AVL 插入（递归 / 非递归） | `avl_insert` / `avl_insert_iter` ✅ |
+| 4.20 | AVL 删除 | `avl_delete` ✅ |
+| 4.21 | 高度域位宽（一字节足够） | `avl_height_bits` ✅ |
+| 4.22 | AVL 高度上界 ≈ 1.44 log₂N | 由 4.15 反解 ✅ |
+| 4.23 / 4.24 | Splay 访问伸展到根 / 删除 | `splay_access` / `splay_delete` ✅ |
+| 4.25 ~ 4.27 | Splay 链式最坏 / 顺序访问 O(N) / 摊还 O(log N) | `splay_chain_path_length`、`splay_sequential_access_rotations`、旋转计数 ✅ |
+| 4.28 | 一次遍历求结点/叶/满结点数 | `tree_stats` ✅ |
+| 4.29 / 4.30 | 随机 BST / 最少结点 AVL 树 | `bst_random` / `avl_min_tree` ✅ |
+| 4.31 | 有序数组 → 理想平衡 BST | `bst_ideal_from_sorted` ✅ |
+| 4.32 | 打印 [k1,k2] 区间（剪枝） | `bst_print_range` ✅ |
+| 4.33 / 4.34 | 分配坐标并画树 | `tree_assign_xy` / `tree_print_grid` / `tree_print_indented` ✅ |
+| 4.35 | 层序遍历 | `tree_level_order` ✅ |
+| 4.36 | 2-3 树（= M=3 的 B 树） | `tree23_create` ✅ |
+| 4.37 | B 树插入/删除 | `btree_insert/delete` ✅ |
+| 4.38 | B* 树 | ANSWERS.md（算法描述） ✅ |
+| 4.39 / 4.40 | 儿子-兄弟表示、前/后序 | `cs_from_parents/cs_preorder/cs_postorder` ✅ |
+| 4.41 / 4.42 | 相似 / 同构 | `tree_similar` / `tree_isomorphic` ✅ |
+| 4.43 | 判断是否为 BST（开区间法） | `bst_is_bst` ✅ |
+| 4.44 | FindKth（用子树大小） | `bst_find_kth` ✅ |
+| 4.45 | 线索二叉树（中序无栈/无递归） | `threaded.c` ✅ |
+| 4.46 | 2-d 树（插入/查找/范围/最近邻） | `kdtree.c` ✅ |
+
+> 各章编号列表已全部核对完成（第 1~4 章）。后续章节可继续按「编号 + 一句话主题」发来。
