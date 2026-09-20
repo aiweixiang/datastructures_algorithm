@@ -11,6 +11,7 @@
 ```
 .
 ├── include/test_util.h                 零依赖断言测试框架
+├── NUMBERING.md                        习题编号对照表（英文 2e ↔ 你的版本）
 ├── ch01_introduction/                  第 1 章 引论
 │   └── ANSWERS.md
 ├── ch02_algorithm_analysis/            第 2 章 算法分析
@@ -35,10 +36,11 @@
 │   ├── stack_array.c                   动态数组栈（倍增扩容）
 │   ├── stack_linked.c                  链式栈
 │   ├── queue_circular.c                循环数组队列（倍增扩容）
-│   ├── two_stacks.c                    习题 3.24：一个数组实现两个栈
+│   ├── two_stacks.c                    一个数组实现两个栈
+│   ├── min_stack.c                     带 FindMin 的栈（Push/Pop/FindMin 均 O(1)）
 │   ├── balanced_symbols.c              括号匹配
-│   ├── infix_to_postfix.c              中缀→后缀、后缀→中缀（3.23）
-│   ├── postfix_eval.c                  后缀表达式求值（3.22）
+│   ├── infix_to_postfix.c              中缀→后缀、后缀→中缀
+│   ├── postfix_eval.c                  后缀表达式求值
 │   ├── josephus.c                      Josephus 问题（模拟 + 递推）
 │   └── polynomial.c                    多项式 ADT
 ├── tests/                              每个章一个测试可执行文件
@@ -59,7 +61,7 @@ make clean
 | 测试 | 断言数 | 结果 |
 |------|--------|------|
 | `tests/test_ch02.c` | 52037 | ✅ 全部通过 |
-| `tests/test_ch03.c` | 713 | ✅ 全部通过 |
+| `tests/test_ch03.c` | 8774 | ✅ 全部通过 |
 
 编译参数为 `-std=c11 -Wall -Wextra`，**零警告**。
 
@@ -85,4 +87,4 @@ make clean
 - 链表/表的下标在本仓库中统一为 **0 起始**；教材中「第 k 个」的查询保持 **1 起始**（与题目措辞一致）。
 - 查找失败统一返回 `ELEMENT_NOT_FOUND`（值为 `-1`）。
 - 每个 `.c` 文件顶部注释写明该实现对应的习题编号与复杂度。
-- 教材不同印次的习题编号可能有个别出入；`ANSWERS.md` 中按「编号 + 主题」双标注，编号不一致时以主题为准。
+- **习题编号以主题为准**：不同印次/译本的编号会整体移位（例如「带 FindMin 的栈」在英文 2e 是 3.25，在你的版本是 3.22）。因此小节标题写作「主题（英文 2e 编号 X）」，代码文件名一律用主题名，映射表见 `NUMBERING.md`。

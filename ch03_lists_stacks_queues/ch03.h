@@ -144,6 +144,16 @@ void         stkl_push(element_type x, StackLinked *s);
 element_type stkl_top(const StackLinked *s);
 element_type stkl_pop(StackLinked *s);
 
+/* ========== 栈：支持 O(1) 的 FindMin（习题 3.22/3.25 a） ========== */
+typedef struct MinStack MinStack;
+MinStack    *mstk_create(void);
+void         mstk_dispose(MinStack *s);
+int          mstk_push(element_type x, MinStack *s);
+element_type mstk_pop(MinStack *s);
+element_type mstk_find_min(const MinStack *s);   /* O(1) */
+int          mstk_size(const MinStack *s);
+int          mstk_is_empty(const MinStack *s);
+
 /* ================= Queue: growing circular array ================= */
 typedef struct QueueCircular QueueCircular;
 QueueCircular *que_create(int init_capacity);

@@ -397,6 +397,82 @@ static void test_sorted_set_ops(void)
     CHECK_EQ(sorted_union(a, 5, NULL, 0, out), 5);
 }
 
+/* 习题「带 FindMin 的栈」（英文 2e 3.25 a / 中文版 3.22 a）：
+ * 只读的 FindMin 可以 O(1)，因为栈是 LIFO；这里与一个暴力扫描的参考实现对拍。 */
+static unsigned long ms_state = 7UL;
+static int ms_next(int lo, int hi)
+{
+    ms_state = ms_state * 1103515245UL + 12345UL;
+    return lo + (int)((ms_state >> 16) % (unsigned long)(hi - lo + 1));
+}
+
+static void test_min_stack(void)
+{
+    MinStack *s = mstk_create();
+    CHECK(s != NULL);
+    CHECK(mstk_is_empty(s));
+    CHECK_EQ(mstk_size(s), 0);
+    CHECK_EQ(mstk_find_min(s), ELEMENT_NOT_FOUND);
+    CHECK_EQ(mstk_pop(s), ELEMENT_NOT_FOUND);
+
+    int shadow[256];
+    int n = 0;
+    for (int step = 0; step < 2000; ++step) {
+        if (n == 0 || ms_next(0, 1) == 0) {          /* push */
+            int v = ms_next(-50, 50);
+            CHECK_EQ(mstk_push(v, s), 0);
+            shadow[n++] = v;
+        } else {                                      /* pop */
+            CHECK_EQ(mstk_pop(s), shadow[n - 1]);
+            --n;
+        }
+        int want_min = ELEMENT_NOT_FOUND;             /* O(N) reference scan */
+        for (int i = 0; i < n; ++i)
+            if (i == 0 || shadow[i] < want_min)
+                want_min = shadow[i];
+        CHECK_EQ(mstk_find_min(s), want_min);
+        CHECK_EQ(mstk_size(s), n);
+        CHECK_EQ(mstk_is_empty(s), n == 0);
+    }
+    mstk_dispose(s);
+
+    /* 重复的最小值：FindMin 必须一直返回 3，直到两个 3 都被弹出 */
+    MinStack *d = mstk_create();
+    CHECK_EQ(mstk_push(5, d), 0);
+    CHECK_EQ(mstk_push(3, d), 0);
+    CHECK_EQ(mstk_push(3, d), 0);
+    CHECK_EQ(mstk_push(7, d), 0);
+    CHECK_EQ(mstk_find_min(d), 3);
+    CHECK_EQ(mstk_pop(d), 7);
+    CHECK_EQ(mstk_find_min(d), 3);
+    CHECK_EQ(mstk_pop(d), 3);
+    CHECK_EQ(mstk_find_min(d), 3);                    /* 另一个 3 还在 */
+    CHECK_EQ(mstk_pop(d), 3);
+    CHECK_EQ(mstk_find_min(d), 5);
+    CHECK_EQ(mstk_pop(d), 5);
+    CHECK_EQ(mstk_find_min(d), ELEMENT_NOT_FOUND);
+    CHECK(mstk_is_empty(d));
+    mstk_dispose(d);
+
+    /* 单调递减压栈：最小值总是栈顶 */
+    MinStack *dec = mstk_create();
+    for (int i = 10; i >= 1; --i) {
+        CHECK_EQ(mstk_push(i, dec), 0);
+        CHECK_EQ(mstk_find_min(dec), i);
+    }
+    CHECK_EQ(mstk_size(dec), 10);
+    mstk_dispose(dec);
+
+    /* 单调递增压栈：最小值永远是第一个元素 */
+    MinStack *inc = mstk_create();
+    for (int i = 1; i <= 10; ++i) {
+        CHECK_EQ(mstk_push(i, inc), 0);
+        CHECK_EQ(mstk_find_min(inc), 1);
+    }
+    CHECK_EQ(mstk_size(inc), 10);
+    mstk_dispose(inc);
+}
+
 int main(void)
 {
     test_list_array();
@@ -404,6 +480,7 @@ int main(void)
     test_list_cursor();
     test_list_doubly();
     test_stacks();
+    test_min_stack();
     test_queue();
     test_two_stacks();
     test_balanced_symbols();
